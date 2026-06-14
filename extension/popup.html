@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<!-- SETUP VIEW -->
+<div id="view-setup" class="view">
+  <div class="header">
+    <div class="logo">
+      <div class="logo-dot"></div>
+      <span class="logo-text">Kick<em>IRL</em></span>
+    </div>
+    <div class="subtitle">GPS para Streamers</div>
+  </div>
+
+  <div class="section">
+    <label class="label">URL do Servidor</label>
+    <input class="input" id="f-server" value="http://localhost:3000" placeholder="https://kickirl.com">
+    <label class="label">Username na Kick</label>
+    <input class="input" id="f-user" placeholder="seu_username" autocomplete="off">
+    <label class="label">Nome de exibição</label>
+    <input class="input" id="f-display" placeholder="Meu Canal" autocomplete="off">
+    <label class="label">Categoria</label>
+    <input class="input" id="f-cat" value="IRL Streaming" placeholder="IRL, Viagem…">
+  </div>
+
+  <button class="btn-primary" id="btn-register">
+    ✅ Registrar e Conectar
+  </button>
+
+  <div class="info-text" id="setup-status"></div>
+</div>
+
+<!-- TRACKING VIEW -->
+<div id="view-track" class="view" style="display:none">
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo">
+        <div class="logo-dot"></div>
+        <span class="logo-text">Kick<em>IRL</em></span>
+      </div>
+      <button class="btn-small" id="btn-settings" title="Configurações">⚙️</button>
+    </div>
+    <div class="user-card">
+      <div class="user-avatar" id="t-avatar">—</div>
+      <div class="user-info">
+        <div class="user-name" id="t-username">—</div>
+        <div class="user-cat" id="t-category">—</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-card" id="status-card">
+    <div class="status-dot" id="t-dot"></div>
+    <div>
+      <div class="status-title" id="t-status">Offline</div>
+      <div class="status-desc" id="t-desc">Pronto para transmitir</div>
+    </div>
+  </div>
+
+  <button class="btn-primary btn-track" id="btn-track">
+    📡 Iniciar Rastreamento
+  </button>
+
+  <div class="data-grid" id="data-grid" style="display:none">
+    <div class="data-item">
+      <span class="data-label">Latitude</span>
+      <span class="data-value" id="t-lat">—</span>
+    </div>
+    <div class="data-item">
+      <span class="data-label">Longitude</span>
+      <span class="data-value" id="t-lon">—</span>
+    </div>
+    <div class="data-item">
+      <span class="data-label">Precisão</span>
+      <span class="data-value" id="t-acc">—</span>
+    </div>
+    <div class="data-item">
+      <span class="data-label">Envios</span>
+      <span class="data-value" id="t-count">0</span>
+    </div>
+  </div>
+
+  <div class="links-section" id="links-section" style="display:none">
+    <div class="link-item" id="link-viewer" title="Copiar link do mapa">
+      🗺️ <span>Link para viewers</span>
+      <button class="btn-copy" data-target="viewer">📋</button>
+    </div>
+    <div class="link-item" id="link-obs" title="Copiar URL do overlay OBS">
+      🎬 <span>Overlay OBS</span>
+      <button class="btn-copy" data-target="obs">📋</button>
+    </div>
+  </div>
+
+  <div class="footer-text" id="t-error"></div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>

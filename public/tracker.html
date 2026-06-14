@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>KickIRL — Mobile Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kick: #53FC18;
+    --bg: #0b0b0b;
+    --surface: #151515;
+    --border: #222;
+    --text: #fff;
+    --text-muted: #888;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+  body { background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 24px; }
+  h1 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; text-align: center; }
+  h1 span { color: var(--kick); }
+  p.desc { color: var(--text-muted); text-align: center; margin-bottom: 32px; font-size: 0.95rem; line-height: 1.5; }
+  
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  label { font-size: 0.85rem; font-weight: 600; color: #ccc; }
+  input {
+    background: #000;
+    border: 1px solid var(--border);
+    color: #fff;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.2s;
+  }
+  input:focus { border-color: var(--kick); }
+  
+  button {
+    background: var(--kick);
+    color: #000;
+    border: none;
+    padding: 16px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  button:active { transform: scale(0.98); }
+  button:disabled { background: #333; color: #666; cursor: not-allowed; }
+  
+  button.stop {
+    background: #ef4444;
+    color: #fff;
+  }
+  
+  .status {
+    margin-top: 24px;
+    text-align: center;
+    padding: 16px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.05);
+    display: none;
+  }
+  .status.active { display: block; }
+  .status-dot {
+    display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    background: var(--kick); margin-right: 8px;
+    animation: blink 1.5s infinite;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  
+  .logs {
+    margin-top: 16px;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: #000;
+    padding: 12px;
+    border-radius: 8px;
+    height: 100px;
+    overflow-y: auto;
+    width: 100%;
+    max-width: 400px;
+  }
+</style>
+</head>
+<body>
+
+  <h1>Kick<span>IRL</span> Mobile</h1>
+  <p class="desc">Transforme seu celular no rastreador oficial da sua live. Mantenha essa tela aberta enquanto caminha.</p>
+
+  <div class="card" id="login-card">
+    <label>Seu canal na Kick</label>
+    <input type="text" id="username" placeholder="Ex: ninja" />
+    <button id="btn-login">Conectar Aparelho</button>
+  </div>
+
+  <div class="card" id="track-card" style="display: none;">
+    <label>Rastreamento GPS</label>
+    <button id="btn-toggle">Iniciar GPS</button>
+    
+    <div class="status" id="status-box">
+      <div class="status-dot"></div>
+      <span id="status-text">Buscando satélites...</span>
+    </div>
+  </div>
+
+  <div class="logs" id="logs"></div>
+
+<script>
+  let pushKey = null;
+  let watchId = null;
+  let wakeLock = null;
+  let isTracking = false;
+
+  const logBox = document.getElementById('logs');
+  function log(msg) {
+    const time = new Date().toLocaleTimeString();
+    logBox.innerHTML = `[${time}] ${msg}<br>` + logBox.innerHTML;
+  }
+
+  // Request Wake Lock
+  async function requestWakeLock() {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        log('Tela mantida acesa (WakeLock ativo).');
+        wakeLock.addEventListener('release', () => log('WakeLock liberado.'));
+      }
+    } catch (err) {
+      log('Erro no WakeLock: ' + err.name);
+    }
+  }
+
+  // Handle Login
+  document.getElementById('btn-login').addEventListener('click', async () => {
+    const user = document.getElementById('username').value.trim();
+    if (!user) return alert('Digite seu username!');
+    
+    try {
+      document.getElementById('btn-login').disabled = true;
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: user })
+      });
+      const data = await res.json();
+      
+      if (data.pushKey) {
+        pushKey = data.pushKey;
+        document.getElementById('login-card').style.display = 'none';
+        document.getElementById('track-card').style.display = 'flex';
+        log('Aparelho conectado! PushKey recebida.');
+      }
+    } catch (e) {
+      alert('Erro ao conectar.');
+    } finally {
+      document.getElementById('btn-login').disabled = false;
+    }
+  });
+
+  // Handle GPS Toggle
+  document.getElementById('btn-toggle').addEventListener('click', async () => {
+    if (isTracking) stopGPS();
+    else startGPS();
+  });
+
+  function startGPS() {
+    if (!navigator.geolocation) {
+      return alert('GPS não suportado neste navegador.');
+    }
+    
+    isTracking = true;
+    const btn = document.getElementById('btn-toggle');
+    btn.textContent = 'Parar GPS';
+    btn.classList.add('stop');
+    document.getElementById('status-box').classList.add('active');
+    
+    requestWakeLock();
+    
+    log('Solicitando acesso ao GPS...');
+    
+    watchId = navigator.geolocation.watchPosition(
+      async (pos) => {
+        const { latitude, longitude, accuracy, speed, heading } = pos.coords;
+        document.getElementById('status-text').textContent = `Enviando (Precisão: ${Math.round(accuracy)}m)`;
+        
+        try {
+          await fetch(`/api/push?key=${pushKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              lat: latitude, lon: longitude, accuracy, speed, heading
+            })
+          });
+          log(`GPS enviado: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        } catch (e) {
+          log('Erro de rede ao enviar GPS.');
+        }
+      },
+      (err) => {
+        log('Erro no GPS: ' + err.message);
+        document.getElementById('status-text').textContent = 'Erro no GPS!';
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 10000
+      }
+    );
+  }
+
+  function stopGPS() {
+    isTracking = false;
+    if (watchId) navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+    
+    if (wakeLock !== null) {
+      wakeLock.release().then(() => wakeLock = null);
+    }
+
+    const btn = document.getElementById('btn-toggle');
+    btn.textContent = 'Iniciar GPS';
+    btn.classList.remove('stop');
+    document.getElementById('status-box').classList.remove('active');
+    log('Rastreamento parado.');
+    
+    // Send stop signal
+    if (pushKey) {
+      fetch(`/api/stop?key=${pushKey}`, {
+        method: 'POST'
+      }).catch(()=>{});
+    }
+  }
+
+  // Re-aquire wake lock if page becomes visible
+  document.addEventListener('visibilitychange', () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+      requestWakeLock();
+    }
+  });
+
+</script>
+</body>
+</html>

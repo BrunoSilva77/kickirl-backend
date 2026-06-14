@@ -1,0 +1,6 @@
+node_modules/
+data/
+.env
+kickirl-mobile/node_modules
+kickirl-mobile/.expo
+extension.zip
