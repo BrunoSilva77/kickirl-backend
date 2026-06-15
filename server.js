@@ -324,7 +324,7 @@ app.post('/api/get-apk', (req, res) => {
   const masterPassword = process.env.STREAMER_PASSWORD;
 
   if (masterPassword && password === masterPassword) {
-    res.json({ url: 'https://expo.dev/artifacts/eas/_ty6d5RsORz0LG2eHWWxfXZES-2DNCUSFUmYO-fNmNw.apk' });
+    res.json({ url: 'https://expo.dev/artifacts/eas/-dukEXDoBcZJD94hzlJN-xAIaASm_GEVoAOV4xrFheE.apk' });
   } else {
     res.status(401).json({ error: 'Senha incorreta' });
   }
