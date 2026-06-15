@@ -303,7 +303,7 @@ app.post('/api/stop', (req, res) => {
 
   const username = pushKeys.get(pushKey);
   const streamer = streamers.get(username);
-  
+
   streamer.isLive = false;
   streamer.location = null;
   streamer.trail = []; // Optional: clear trail when offline
@@ -320,9 +320,10 @@ app.post('/api/stop', (req, res) => {
 // POST /api/get-apk
 app.post('/api/get-apk', (req, res) => {
   const { password } = req.body;
-  const masterPassword = process.env.STREAMER_PASSWORD || 'streamer123';
-  
-  if (password === masterPassword) {
+  // A senha DEVE ser configurada no painel do Render nas Variáveis de Ambiente
+  const masterPassword = process.env.STREAMER_PASSWORD;
+
+  if (masterPassword && password === masterPassword) {
     res.json({ url: 'https://expo.dev/artifacts/eas/_ty6d5RsORz0LG2eHWWxfXZES-2DNCUSFUmYO-fNmNw.apk' });
   } else {
     res.status(401).json({ error: 'Senha incorreta' });
@@ -456,7 +457,7 @@ wss.on('connection', (ws, req, pathname) => {
   if (!streamers.has(username)) getOrCreate(username);
   const streamer = streamers.get(username);
   if (!streamer) { ws.close(); return; }
-  
+
   streamer.viewers.add(ws);
   console.log(`[ws] viewer conectou em ${username} (total: ${streamer.viewers.size})`);
 
