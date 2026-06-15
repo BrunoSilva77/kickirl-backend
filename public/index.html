@@ -386,7 +386,12 @@ function getColor(username) {
 }
 
 // ═══════════ MAP INIT ═══════════
-map = L.map('map', { zoomControl: false, minZoom: 3 }).setView([0, 0], 3);
+map = L.map('map', { 
+  zoomControl: false, 
+  minZoom: 3,
+  maxBounds: [[-90, -10000], [90, 10000]],
+  maxBoundsViscosity: 1.0 
+}).setView([0, 0], 3);
 L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
   subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20
 }).addTo(map);
