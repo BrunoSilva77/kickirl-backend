@@ -6,7 +6,7 @@ import { useKeepAwake } from 'expo-keep-awake';
 export default function App() {
   useKeepAwake(); // Keep screen on
 
-  const [serverUrl, setServerUrl] = useState('http://192.168.0.x:3000');
+  const SERVER_URL = 'https://kickirl-backend.onrender.com';
   const [username, setUsername] = useState('');
   const [pushKey, setPushKey] = useState(null);
   
@@ -20,11 +20,11 @@ export default function App() {
   };
 
   const handleConnect = async () => {
-    if (!username.trim() || !serverUrl.trim()) return Alert.alert('Erro', 'Preencha Servidor e Nickname');
+    if (!username.trim() || !SERVER_URL.trim()) return Alert.alert('Erro', 'Preencha Servidor e Nickname');
     
     try {
       addLog('Conectando ao servidor...');
-      const url = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl;
+      const url = SERVER_URL.endsWith('/') ? SERVER_URL.slice(0, -1) : SERVER_URL;
       const res = await fetch(`${url}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -66,7 +66,7 @@ export default function App() {
         setStatusText(`Enviando (Precisão: ${Math.round(accuracy)}m)`);
         
         try {
-          const url = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl;
+          const url = SERVER_URL.endsWith('/') ? SERVER_URL.slice(0, -1) : SERVER_URL;
           await fetch(`${url}/api/push?key=${pushKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -91,7 +91,7 @@ export default function App() {
     addLog('GPS Desativado.');
 
     try {
-      const url = serverUrl.endsWith('/') ? serverUrl.slice(0, -1) : serverUrl;
+      const url = SERVER_URL.endsWith('/') ? SERVER_URL.slice(0, -1) : SERVER_URL;
       await fetch(`${url}/api/stop?key=${pushKey}`, { method: 'POST' });
     } catch (e) {
       // Ignora erro de rede no stop
@@ -104,17 +104,7 @@ export default function App() {
       
       {!pushKey ? (
         <View style={styles.card}>
-          <Text style={styles.label}>IP do Servidor na Rede (NodeJS)</Text>
-          <TextInput 
-            style={styles.input} 
-            value={serverUrl} 
-            onChangeText={setServerUrl} 
-            placeholder="Ex: http://192.168.0.10:3000" 
-            placeholderTextColor="#666"
-            keyboardType="url"
-            autoCapitalize="none"
-          />
-          
+
           <Text style={styles.label}>Seu canal na Kick</Text>
           <TextInput 
             style={styles.input} 

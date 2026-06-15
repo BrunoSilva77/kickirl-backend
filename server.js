@@ -317,6 +317,18 @@ app.post('/api/stop', (req, res) => {
   res.json({ status: 'offline' });
 });
 
+// POST /api/get-apk
+app.post('/api/get-apk', (req, res) => {
+  const { password } = req.body;
+  const masterPassword = process.env.STREAMER_PASSWORD || 'streamer123';
+  
+  if (password === masterPassword) {
+    res.json({ url: 'https://expo.dev/artifacts/eas/_ty6d5RsORz0LG2eHWWxfXZES-2DNCUSFUmYO-fNmNw.apk' });
+  } else {
+    res.status(401).json({ error: 'Senha incorreta' });
+  }
+});
+
 // GET /api/pull?key=<pullKey>
 app.get('/api/pull', (req, res) => {
   const pullKey = req.query.key;

@@ -5,6 +5,7 @@
 const $ = id => document.getElementById(id);
 
 let config = null;
+const SERVER_URL = 'https://kickirl-backend.onrender.com';
 
 // ─── INIT ──────────────────────────────────────────────────────────────────
 
@@ -24,8 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
     showTrackingView(data);
   } else {
-    // Show setup view
-    if (data.serverUrl) $('f-server').value = data.serverUrl;
+    if (data.username) $('f-user').value = data.username;
     if (data.username) $('f-user').value = data.username;
   }
 
@@ -36,12 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ─── REGISTER ──────────────────────────────────────────────────────────────
 
 $('btn-register').addEventListener('click', async () => {
-  const serverUrl = $('f-server').value.trim().replace(/\/$/, '');
+  const serverUrl = SERVER_URL;
   const username = $('f-user').value.trim();
   const displayName = $('f-display').value.trim() || username;
   const category = $('f-cat').value.trim() || 'IRL Streaming';
 
-  if (!serverUrl) { $('setup-status').textContent = '⚠️ URL do servidor é obrigatória'; return; }
   if (!username) { $('setup-status').textContent = '⚠️ Username é obrigatório'; return; }
 
   $('btn-register').textContent = 'Conectando…';
