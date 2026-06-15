@@ -60,6 +60,15 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 .conn-dot.off { background: var(--text3); }
 .conn-dot.err { background: var(--red); }
 
+.btn-download-app {
+  background: rgba(255,255,255,0.08); color: var(--text);
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 5px 12px; font-size: 0.75rem; font-weight: 600;
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: 0.2s;
+}
+.btn-download-app:hover { background: var(--kick); color: #000; border-color: var(--kick); }
+
 /* ═══ MAP ═══ */
 #map { position: fixed; inset: 0; top: 48px; z-index: 1; }
 /* Dark mode filter for Google Maps tiles */
@@ -273,6 +282,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   <div class="topbar-stat" id="viewer-stat" style="display:none">
     👁 <span class="count" id="viewer-count">0</span>
   </div>
+  <a href="https://expo.dev/artifacts/eas/_ty6d5RsORz0LG2eHWWxfXZES-2DNCUSFUmYO-fNmNw.apk" class="btn-download-app" target="_blank" title="Baixar App para Android">
+    📱 Baixar App
+  </a>
 </div>
 
 <!-- MAP -->
@@ -374,9 +386,9 @@ function getColor(username) {
 }
 
 // ═══════════ MAP INIT ═══════════
-map = L.map('map', { zoomControl: false }).setView([0, 0], 3);
+map = L.map('map', { zoomControl: false, maxBounds: [[-90, -180], [90, 180]], maxBoundsViscosity: 1.0 }).setView([0, 0], 3);
 L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20
+  subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20, noWrap: true, bounds: [[-90, -180], [90, 180]]
 }).addTo(map);
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
@@ -517,8 +529,8 @@ function selectStreamer(username) {
   // Init panel minimap
     setTimeout(() => {
     if (!panelMap) {
-      panelMap = L.map('panel-minimap', { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false }).setView([s.location.lat, s.location.lon], 15);
-      L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20 }).addTo(panelMap);
+      panelMap = L.map('panel-minimap', { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false, maxBounds: [[-90, -180], [90, 180]] }).setView([s.location.lat, s.location.lon], 15);
+      L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20, noWrap: true }).addTo(panelMap);
     } else {
       panelMap.setView([s.location.lat, s.location.lon], 15);
     }
