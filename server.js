@@ -41,22 +41,59 @@ function ensureDataDir() {
 function loadData() {
   ensureDataDir();
   try {
+    let data = [];
     if (fs.existsSync(DATA_FILE)) {
       const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-      const data = JSON.parse(raw);
-      for (const s of data) {
-        s.viewers = new Set();
-        s.isLive = false; // começa offline após reinício
-        s.trail = s.trail || [];
-        s.platform = s.platform || 'kick';
-        s.channelId = s.channelId || s.username;
-        s.offlineAt = s.location ? s.location.updatedAt : null;
-        streamers.set(s.username, s);
-        pushKeys.set(s.pushKey, s.username);
-        pullKeys.set(s.pullKey, s.username);
-      }
-      console.log(`[data] carregados ${data.length} streamers do disco`);
+      data = JSON.parse(raw);
     }
+    
+    // Seed padrão para o Render (ephemeral disk fallback)
+    if (data.length === 0) {
+      data = [
+        {
+          username: 'gabepeixe',
+          displayName: 'gabepeixe',
+          category: 'IRL Streaming',
+          rtirlKey: 'te0k0n9vf1f3tqeu',
+          pushKey: '4aaab0eb2d7f473e9f49a40b0e9da3d5',
+          pullKey: '515456063e7b40f5be9178008eb484d4'
+        },
+        {
+          username: 'loud_coringa',
+          displayName: 'loud_coringa',
+          category: 'IRL Streaming',
+          pushKey: '0478056b5f08430a8005afd290dffaba',
+          pullKey: 'b9a1d524b273431bae8042d788a9376d'
+        },
+        {
+          username: 'loud_caiox',
+          displayName: 'loud_caiox',
+          category: 'IRL Streaming',
+          pushKey: '172e58fc96ef43eb8a7b897422a508f9',
+          pullKey: 'd6f56d7ac73b4c2b83522e111eb29467'
+        },
+        {
+          username: 'brabox',
+          displayName: 'brabox',
+          category: 'IRL Streaming',
+          pushKey: '7bc3827ec31843b0ab12f172e58fc96e',
+          pullKey: 'e7b484d4515456063e7b40f5be917800'
+        }
+      ];
+    }
+
+    for (const s of data) {
+      s.viewers = new Set();
+      s.isLive = false; // começa offline após reinício
+      s.trail = s.trail || [];
+      s.platform = s.platform || 'kick';
+      s.channelId = s.channelId || s.username;
+      s.offlineAt = s.location ? s.location.updatedAt : null;
+      streamers.set(s.username, s);
+      pushKeys.set(s.pushKey, s.username);
+      pullKeys.set(s.pullKey, s.username);
+    }
+    console.log(`[data] carregados ${streamers.size} streamers.`);
   } catch (err) {
     console.error('[data] erro ao carregar:', err.message);
   }
