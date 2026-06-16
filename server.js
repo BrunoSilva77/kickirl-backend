@@ -86,6 +86,7 @@ function loadData() {
       s.viewers = new Set();
       s.isLive = false; // começa offline após reinício
       s.trail = s.trail || [];
+      s.safeZones = s.safeZones || [];
       s.platform = s.platform || 'kick';
       s.channelId = s.channelId || s.username;
       s.offlineAt = s.location ? s.location.updatedAt : null;
