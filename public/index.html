@@ -260,6 +260,291 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   .panel { width: 100%; max-width: 100%; border-left: none; border-top: 1px solid var(--border2); top: auto; bottom: 0; height: 70vh; transform: translateY(100%); border-radius: 18px 18px 0 0; }
   .panel.open { transform: translateY(0); }
 }
+
+/* Minimized Panel State */
+.panel.minimized {
+  height: 80px !important;
+  bottom: auto !important;
+}
+.panel.minimized .panel-stats,
+.panel.minimized .panel-section,
+.panel.minimized .panel-actions {
+  display: none !important;
+}
+.panel-overlay.minimized {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media (max-width: 600px) {
+  .panel.minimized {
+    height: 80px !important;
+    top: auto !important;
+    bottom: 0 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* ═══ SEARCH BAR ═══ */
+.map-search-container {
+  position: fixed;
+  top: 64px;
+  left: 16px;
+  z-index: 999;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+}
+.map-search-box {
+  display: flex;
+  align-items: center;
+  background: rgba(14, 14, 14, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 4px 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  transition: border-color 0.2s;
+}
+.map-search-box:focus-within {
+  border-color: var(--kick);
+}
+#search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.85rem;
+  padding: 8px 6px;
+  outline: none;
+}
+#search-input::placeholder {
+  color: var(--text3);
+}
+.search-btn, .clear-search-btn {
+  background: transparent;
+  border: none;
+  color: var(--text2);
+  cursor: pointer;
+  padding: 8px;
+  font-size: 0.9rem;
+  transition: color 0.15s;
+}
+.search-btn:hover { color: var(--kick); }
+.clear-search-btn:hover { color: var(--red); }
+
+.drop-pin-btn {
+  background: rgba(14, 14, 14, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border2);
+  color: #fff;
+  cursor: pointer;
+  padding: 0 12px;
+  border-radius: 10px;
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.drop-pin-btn:hover, .drop-pin-btn.active {
+  border-color: var(--kick);
+  background: rgba(20, 20, 20, 0.95);
+}
+.drop-pin-btn svg {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 4px rgba(239,68,68,0.4));
+  transition: transform 0.2s;
+}
+.drop-pin-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* ═══ TOAST ═══ */
+.toast-notification {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(14, 14, 14, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 10px 18px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  pointer-events: none;
+}
+.toast-notification.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.search-results {
+  background: rgba(14, 14, 14, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  margin-top: 6px;
+  max-height: 250px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+.search-result-item {
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  color: var(--text2);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s, color 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.search-result-item:last-child { border-bottom: none; }
+.search-result-item:hover {
+  background: rgba(255,255,255,0.03);
+  color: #fff;
+}
+.search-result-name {
+  font-weight: 600;
+  color: #fff;
+}
+.search-result-addr {
+  font-size: 0.7rem;
+  color: var(--text3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ═══ ROUTE CARD ═══ */
+.route-info-card {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  z-index: 999;
+  background: rgba(14, 14, 14, 0.9);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 280px;
+}
+.route-info-card.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.route-info-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--text3);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+.route-info-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.route-info-mode {
+  font-size: 0.85rem;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.route-info-mode .icon {
+  font-size: 1rem;
+}
+.route-close-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  border-radius: 6px;
+  padding: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s, color 0.15s;
+  width: 100%;
+}
+.route-close-btn:hover {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+
+@media (max-width: 600px) {
+  .route-info-card {
+    bottom: 96px;
+  }
+}
+
+/* ═══ ABOUT MODAL ═══ */
+.about-overlay {
+  position: fixed; inset: 0; z-index: 1100;
+  background: rgba(0,0,0,0.6); opacity: 0;
+  pointer-events: none; transition: opacity 0.25s;
+}
+.about-overlay.open { opacity: 1; pointer-events: auto; }
+
+.about-modal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 480px; max-width: 90vw;
+  background: rgba(16, 16, 16, 0.95);
+  backdrop-filter: blur(24px);
+  border: 1px solid var(--border2);
+  border-radius: 16px; padding: 24px;
+  z-index: 1200;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.8);
+  opacity: 0; pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.about-modal.open {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1; pointer-events: auto;
+}
+.about-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); padding-bottom: 12px;
+}
+.about-logo { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: #fff; }
+.about-logo em { color: var(--kick); font-style: normal; }
+.about-close {
+  background: none; border: none; color: var(--text2);
+  font-size: 1.1rem; cursor: pointer; transition: 0.15s;
+}
+.about-close:hover { color: #fff; }
+.about-body {
+  font-size: 0.85rem; color: var(--text2); line-height: 1.6;
+  display: flex; flex-direction: column; gap: 12px;
+  max-height: 60vh; overflow-y: auto; padding-right: 4px;
+}
+.about-section-title {
+  font-weight: 700; color: #fff; font-size: 0.9rem; margin-bottom: 4px;
+}
+.about-list {
+  padding-left: 18px; display: flex; flex-direction: column; gap: 4px;
+}
+.about-list li strong { color: #fff; }
 </style>
 </head>
 <body>
@@ -282,9 +567,81 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   <div class="topbar-stat" id="viewer-stat" style="display:none">
     👁 <span class="count" id="viewer-count">0</span>
   </div>
+  <button class="btn-download-app" onclick="openAboutModal()" title="Sobre o Projeto" style="background: rgba(83,252,24,0.1); border-color: rgba(83,252,24,0.3); color: var(--kick); margin-left: 6px;">
+    ℹ️ Sobre
+  </button>
   <button class="btn-download-app" onclick="promptDownload()" title="Baixar App para Android">
     📱 Baixar App
   </button>
+</div>
+
+<!-- ABOUT MODAL -->
+<div class="about-overlay" id="about-overlay" onclick="closeAboutModal()"></div>
+<div class="about-modal" id="about-modal">
+  <div class="about-header">
+    <div class="about-logo">ℹ️ Sobre o Kick<em>IRL</em></div>
+    <button class="about-close" onclick="closeAboutModal()">✕</button>
+  </div>
+  <div class="about-body">
+    <p>O <strong>KickIRL</strong> é um sistema de rastreamento de localização GPS em tempo real construído para streamers que realizam transmissões externas ou dinâmicas ("In Real Life").</p>
+    
+    <div class="about-section-title">✨ Funcionalidades:</div>
+    <ul class="about-list">
+      <li><strong>Acompanhamento ao Vivo:</strong> Assista à transmissão de vídeo integrada lado a lado com a posição do streamer no mapa.</li>
+      <li><strong>Trajeto Inteligente:</strong> As linhas do caminho percorrido seguem o traçado real das ruas (Road Snapping) em vez de atravessar quadras.</li>
+      <li><strong>Zonas de Segurança:</strong> Permite que os streamers definam locais onde a posição é oculta automaticamente para preservar sua privacidade.</li>
+      <li><strong>Modo Offline Temporário:</strong> O pino do streamer fica cinza ao desligar a live e some automaticamente após 5 minutos.</li>
+    </ul>
+
+    <div class="about-section-title">📺 Streamers Suportados:</div>
+    <p>Inicialmente desenvolvida para um grupo selecionado de streamers (<em>gabepeixe, loud_coringa, loud_caiox</em> e <em>brabox</em>), com planos de expansão futura para novos criadores de conteúdo.</p>
+
+    <div style="margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem;">
+      <span style="color: #fff; font-weight: 600;">👨‍💻 Desenvolvido por Bruno Silva:</span>
+      <div style="display: flex; gap: 12px;">
+        <a href="https://github.com/BrunoSilva77" target="_blank" style="color: var(--kick); text-decoration: none; display: flex; align-items: center; gap: 4px;">GitHub</a>
+        <a href="https://www.linkedin.com/in/bruno-h-silva2025/" target="_blank" style="color: #38bdf8; text-decoration: none; display: flex; align-items: center; gap: 4px;">LinkedIn</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="map-search-container">
+  <div style="display:flex;align-items:stretch;gap:8px;">
+    <div class="map-search-box" style="flex:1;">
+      <input type="text" id="search-input" placeholder="Buscar local, restaurante, rua..." onkeydown="if(event.key==='Enter') searchPlaces()">
+      <button class="search-btn" onclick="searchPlaces()" title="Buscar">🔍</button>
+      <button class="clear-search-btn" id="clear-search-btn" onclick="clearSearch()" title="Limpar" style="display:none">✕</button>
+    </div>
+    <button class="drop-pin-btn" id="drop-pin-btn" onclick="toggleDropPin()" title="Soltar pino no mapa">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="pinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ff4b4b" />
+            <stop offset="100%" stop-color="#990000" />
+          </linearGradient>
+          <filter id="pinGlow">
+            <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.8"/>
+            <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="#ff0000" flood-opacity="0.5"/>
+          </filter>
+        </defs>
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="url(#pinGrad)" filter="url(#pinGlow)"/>
+        <circle cx="12" cy="9" r="2.5" fill="#1a1a1a" filter="drop-shadow(0px 1px 1px rgba(255,255,255,0.3))"/>
+      </svg>
+    </button>
+  </div>
+  <div class="search-results" id="search-results"></div>
+</div>
+
+<!-- ROUTE CARD -->
+<div class="route-info-card" id="route-info-card">
+  <div class="route-info-title">Distância até o Destino</div>
+  <div class="route-info-details">
+    <div class="route-info-mode"><span class="icon">🚗</span> <span id="route-drive-info">Calculando...</span></div>
+    <div class="route-info-mode"><span class="icon">🚶</span> <span id="route-walk-info">Calculando...</span></div>
+  </div>
+  <button class="route-close-btn" onclick="clearRoute()">Limpar Rota</button>
 </div>
 
 <!-- MAP -->
@@ -311,6 +668,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
       </div>
       <div class="panel-category" id="p-category">—</div>
     </div>
+    <button class="panel-close" id="p-minimize-btn" onclick="toggleMinimize()" title="Minimizar painel" style="margin-right: 6px;">–</button>
     <button class="panel-close" onclick="closePanel()">✕</button>
   </div>
 
@@ -339,13 +697,20 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
     <div class="panel-coords" id="p-coords">Aguardando…</div>
   </div>
 
+  <div class="panel-section" id="p-stream-section" style="display: none;">
+    <div class="panel-section-title">Assista ao vivo</div>
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; border: 1px solid var(--border); background: #000;">
+      <iframe id="p-player" src="" frameborder="0" scrolling="no" allowfullscreen="true" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+    </div>
+  </div>
+
   <div class="panel-section">
     <div class="panel-section-title">Trilha</div>
     <div class="panel-trail-info" id="p-trail-info">—</div>
   </div>
 
   <div class="panel-actions">
-    <button class="btn-kick" id="p-kick-btn" onclick="openKick()">
+    <button class="btn-kick" id="p-kick-btn" onclick="openStream()">
       🎬 Assistir na Kick
     </button>
   </div>
@@ -399,48 +764,56 @@ L.control.zoom({ position: 'bottomright' }).addTo(map);
 
 // ═══════════ MARKER MANAGEMENT ═══════════
 function createOrUpdateMarker(s) {
-  const c = getColor(s.username);
+  const c = s.isLive ? getColor(s.username) : '#777777';
   const initials = (s.displayName || s.username).slice(0, 2).toUpperCase();
 
   if (!s.location) return;
 
   const existing = markers.get(s.username);
 
+  const liveDot = s.isLive ? `<div class="marker-live"></div>` : '';
+  const pulseRing = s.isLive ? `<div class="marker-pulse" style="border-color:${c}"></div>` : '';
+  const opacityStyle = s.isLive ? '' : 'style="opacity: 0.65; filter: grayscale(50%);"';
+
+  const icon = L.divIcon({
+    className: '',
+    html: `
+      <div class="marker-pin" ${opacityStyle} onclick="event.stopPropagation(); selectStreamer('${s.username}')">
+        <div class="marker-avatar" style="background:${c}; color:#000; border-color:${s.isLive ? '#fff' : '#444'}">
+          ${initials}
+          ${liveDot}
+          ${pulseRing}
+        </div>
+        <div class="marker-name" style="background:${s.isLive ? 'rgba(0,0,0,0.8)' : 'rgba(30,30,30,0.8)'}">${s.displayName || s.username}</div>
+      </div>
+    `,
+    iconSize: [60, 65],
+    iconAnchor: [30, 32],
+  });
+
   if (existing) {
-    // Update position
+    // Update position and icon
     existing.marker.setLatLng([s.location.lat, s.location.lon]);
+    existing.marker.setIcon(icon);
 
     // Update trail
-    if (s.trail && s.trail.length > 1) {
-      if (existing.trailLine) map.removeLayer(existing.trailLine);
+    if (existing.trailLine) {
+      map.removeLayer(existing.trailLine);
+      existing.trailLine = null;
+    }
+    if (selectedUser === s.username && s.trail && s.trail.length > 1) {
       const pts = s.trail.map(p => Array.isArray(p) ? p : [p.lat || p[0], p.lon || p[1]]);
-      existing.trailLine = L.polyline(pts, { color: c, weight: 3, opacity: 0.5, smoothFactor: 1.5 }).addTo(map);
+      existing.trailLine = L.polyline(pts, { color: getColor(s.username), weight: 3, opacity: s.isLive ? 0.5 : 0.25, smoothFactor: 1.5 }).addTo(map);
     }
   } else {
     // Create new marker
-    const icon = L.divIcon({
-      className: '',
-      html: `
-        <div class="marker-pin" onclick="event.stopPropagation(); selectStreamer('${s.username}')">
-          <div class="marker-avatar" style="background:${c}; color:#000">
-            ${initials}
-            <div class="marker-live"></div>
-            <div class="marker-pulse" style="border-color:${c}"></div>
-          </div>
-          <div class="marker-name">${s.displayName || s.username}</div>
-        </div>
-      `,
-      iconSize: [60, 65],
-      iconAnchor: [30, 32],
-    });
-
     const marker = L.marker([s.location.lat, s.location.lon], { icon, interactive: true }).addTo(map);
     marker.on('click', () => selectStreamer(s.username));
 
     let trailLine = null;
-    if (s.trail && s.trail.length > 1) {
+    if (selectedUser === s.username && s.trail && s.trail.length > 1) {
       const pts = s.trail.map(p => Array.isArray(p) ? p : [p.lat || p[0], p.lon || p[1]]);
-      trailLine = L.polyline(pts, { color: c, weight: 3, opacity: 0.5, smoothFactor: 1.5 }).addTo(map);
+      trailLine = L.polyline(pts, { color: getColor(s.username), weight: 3, opacity: s.isLive ? 0.5 : 0.25, smoothFactor: 1.5 }).addTo(map);
     }
 
     markers.set(s.username, { marker, trailLine });
@@ -476,7 +849,7 @@ function updateTopbar() {
   liveStat.style.display = liveCount > 0 ? 'flex' : 'none';
 
   const empty = document.getElementById('empty-state');
-  if (liveCount > 0) empty.classList.remove('show');
+  if (streamers.size > 0) empty.classList.remove('show');
   else empty.classList.add('show');
 }
 
@@ -485,7 +858,56 @@ function updateSelectedPanel() {
   const s = streamers.get(selectedUser);
   if (!s) return;
 
-  document.getElementById('p-viewers').textContent = (s.viewerCount || 0).toLocaleString();
+  document.getElementById('p-viewers').textContent = s.isLive ? (s.viewerCount || 0).toLocaleString() : 'offline';
+  document.getElementById('p-badge').style.display = s.isLive ? 'inline-flex' : 'none';
+
+  // Oculta/mostra player de acordo com a transmissão ativa
+  const player = document.getElementById('p-player');
+  const streamSection = document.getElementById('p-stream-section');
+  const actionBtn = document.getElementById('p-kick-btn');
+  if (player && streamSection) {
+    const platform = s.platform || 'kick';
+    const channel = s.channelId || s.username;
+
+    if (platform === 'none') {
+      player.src = '';
+      streamSection.style.display = 'none';
+      if (actionBtn) actionBtn.style.display = 'none';
+    } else {
+      let src = '';
+      if (platform === 'kick') {
+        src = `https://player.kick.com/${channel}?origin=${encodeURIComponent(window.location.origin)}`;
+      } else if (platform === 'twitch') {
+        src = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}&autoplay=false`;
+      } else if (platform === 'youtube') {
+        src = `https://www.youtube.com/embed/live_stream?channel=${channel}`;
+      }
+
+      if (player.src !== src) {
+        player.src = src;
+      }
+      streamSection.style.display = 'block';
+
+      // Atualiza botão de ação
+      if (actionBtn) {
+        actionBtn.style.display = 'flex';
+        if (platform === 'kick') {
+          actionBtn.textContent = '🎬 Assistir na Kick';
+          actionBtn.style.backgroundColor = 'var(--kick)';
+          actionBtn.style.color = '#000';
+        } else if (platform === 'twitch') {
+          actionBtn.textContent = '🎬 Assistir na Twitch';
+          actionBtn.style.backgroundColor = '#9146FF';
+          actionBtn.style.color = '#fff';
+        } else if (platform === 'youtube') {
+          actionBtn.textContent = '🎬 Assistir no YouTube';
+          actionBtn.style.backgroundColor = '#FF0000';
+          actionBtn.style.color = '#fff';
+        }
+      }
+    }
+  }
+
   if (s.location) {
     document.getElementById('p-accuracy').textContent = s.location.accuracy ? `${Math.round(s.location.accuracy)}m` : '—';
     document.getElementById('p-speed').textContent = s.location.speed ? `${(s.location.speed * 3.6).toFixed(1)} km/h` : '—';
@@ -506,13 +928,61 @@ function updateSelectedPanel() {
 }
 
 // ═══════════ PANEL ═══════════
+let isPanelMinimized = false;
+
+function toggleMinimize() {
+  const panel = document.getElementById('panel');
+  const overlay = document.getElementById('panel-overlay');
+  const btn = document.getElementById('p-minimize-btn');
+  
+  isPanelMinimized = !isPanelMinimized;
+  if (isPanelMinimized) {
+    panel.classList.add('minimized');
+    overlay.classList.add('minimized');
+    btn.textContent = '+';
+    btn.title = "Maximizar painel";
+  } else {
+    panel.classList.remove('minimized');
+    overlay.classList.remove('minimized');
+    btn.textContent = '–';
+    btn.title = "Minimizar painel";
+  }
+  
+  // Invalidate map size if needed
+  if (panelMap) {
+    setTimeout(() => panelMap.invalidateSize(), 300);
+  }
+}
+
 function selectStreamer(username) {
   const s = streamers.get(username);
   if (!s || !s.location) return;
 
+  // Ocultar trilha do streamer selecionado anteriormente
+  if (selectedUser && selectedUser !== username) {
+    const prevStreamer = streamers.get(selectedUser);
+    if (prevStreamer) {
+      setTimeout(() => createOrUpdateMarker(prevStreamer), 0);
+    }
+  }
+
+  // Se o painel estava minimizado, restaura para maximizado
+  if (isPanelMinimized) {
+    toggleMinimize();
+  }
+
   selectedUser = username;
   const c = getColor(username);
   const initials = (s.displayName || s.username).slice(0, 2).toUpperCase();
+
+  // Desenhar trilha para o novo streamer selecionado
+  createOrUpdateMarker(s);
+
+  // Se houver um marcador de busca ativo, recalcular a rota para o novo streamer
+  if (typeof searchMarker !== 'undefined' && searchMarker) {
+    const dest = searchMarker.getLatLng();
+    setTimeout(() => calculateRouteTo(dest.lat, dest.lng), 200);
+  }
 
   // Header
   const av = document.getElementById('p-avatar');
@@ -532,9 +1002,9 @@ function selectStreamer(username) {
   map.flyTo([s.location.lat, s.location.lon], 15, { duration: 1 });
 
   // Init panel minimap
-    setTimeout(() => {
+  setTimeout(() => {
     if (!panelMap) {
-      panelMap = L.map('panel-minimap', { zoomControl: false, attributionControl: false, dragging: false, scrollWheelZoom: false }).setView([s.location.lat, s.location.lon], 15);
+      panelMap = L.map('panel-minimap', { zoomControl: true, attributionControl: false, dragging: true, scrollWheelZoom: true }).setView([s.location.lat, s.location.lon], 15);
       L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['mt0', 'mt1', 'mt2', 'mt3'], maxZoom: 20 }).addTo(panelMap);
     } else {
       panelMap.setView([s.location.lat, s.location.lon], 15);
@@ -560,14 +1030,62 @@ function selectStreamer(username) {
 }
 
 function closePanel() {
+  const prevUser = selectedUser;
   selectedUser = null;
+  if (prevUser) {
+    const prevStreamer = streamers.get(prevUser);
+    if (prevStreamer) {
+      createOrUpdateMarker(prevStreamer); // ocultar a trilha
+    }
+  }
+
+  // Restaurar estado do painel se estava minimizado
+  if (isPanelMinimized) {
+    isPanelMinimized = false;
+    document.getElementById('panel').classList.remove('minimized');
+    document.getElementById('panel-overlay').classList.remove('minimized');
+    const btn = document.getElementById('p-minimize-btn');
+    if (btn) {
+      btn.textContent = '–';
+      btn.title = "Minimizar painel";
+    }
+  }
+
   document.getElementById('panel').classList.remove('open');
   document.getElementById('panel-overlay').classList.remove('open');
+
+  // Clear Kick player
+  const player = document.getElementById('p-player');
+  const streamSection = document.getElementById('p-stream-section');
+  if (player && streamSection) {
+    player.src = '';
+    streamSection.style.display = 'none';
+  }
 }
 
-function openKick() {
+function openAboutModal() {
+  document.getElementById('about-modal').classList.add('open');
+  document.getElementById('about-overlay').classList.add('open');
+}
+
+function closeAboutModal() {
+  document.getElementById('about-modal').classList.remove('open');
+  document.getElementById('about-overlay').classList.remove('open');
+}
+
+function openStream() {
   if (selectedUser) {
-    window.open(`https://kick.com/${selectedUser}`, '_blank');
+    const s = streamers.get(selectedUser);
+    if (!s) return;
+    const platform = s.platform || 'kick';
+    const channel = s.channelId || s.username;
+
+    let url = '';
+    if (platform === 'kick') url = `https://kick.com/${channel}`;
+    else if (platform === 'twitch') url = `https://twitch.tv/${channel}`;
+    else if (platform === 'youtube') url = `https://youtube.com/channel/${channel}`;
+
+    if (url) window.open(url, '_blank');
   }
 }
 
@@ -634,14 +1152,26 @@ function connect() {
       s.viewerCount = d.viewerCount ?? s.viewerCount;
       s.displayName = d.displayName || s.displayName;
       s.category = d.category || s.category;
+      s.platform = d.platform || s.platform || 'kick';
+      s.channelId = d.channelId || s.channelId || d.username;
 
-      if (!s.trail) s.trail = [];
-      s.trail.push([d.lat, d.lon]);
-      if (s.trail.length > 500) s.trail.shift();
+      if (d.trail) {
+        s.trail = d.trail;
+      } else {
+        if (!s.trail) s.trail = [];
+        s.trail.push([d.lat, d.lon]);
+        if (s.trail.length > 500) s.trail.shift();
+      }
 
       createOrUpdateMarker(s);
       updateTopbar();
-      if (selectedUser === d.username) updateSelectedPanel();
+      if (selectedUser === d.username) {
+        updateSelectedPanel();
+        if (typeof searchMarker !== 'undefined' && searchMarker) {
+          const dest = searchMarker.getLatLng();
+          calculateRouteTo(dest.lat, dest.lng);
+        }
+      }
       return;
     }
 
@@ -657,10 +1187,16 @@ function connect() {
       const s = streamers.get(d.username);
       if (s) {
         s.isLive = false;
-        // Keep marker but change visuals could be done here
-        removeMarker(d.username);
-        streamers.delete(d.username);
+        createOrUpdateMarker(s);
+        if (selectedUser === d.username) updateSelectedPanel();
       }
+      updateTopbar();
+      return;
+    }
+
+    if (d.type === 'remove') {
+      streamers.delete(d.username);
+      removeMarker(d.username);
       updateTopbar();
       if (selectedUser === d.username) closePanel();
       return;
@@ -728,7 +1264,327 @@ function notify(msg) {
 
 // ═══════════ KEYBOARD ═══════════
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closePanel();
+  if (e.key === 'Escape') {
+    closePanel();
+    closeAboutModal();
+    clearSearch();
+  }
+});
+
+// ═══════════ TOAST ═══════════
+function showToast(msg) {
+  let el = document.getElementById('toast-notify');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast-notify';
+    el.className = 'toast-notification';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._timeout);
+  el._timeout = setTimeout(() => {
+    el.classList.remove('show');
+  }, 2500);
+}
+
+// ═══════════ SEARCH & ROUTING ═══════════
+let searchMarker = null;
+let routeLine = null;
+let dropPinMode = false;
+
+function createDestinationMarker(lat, lon) {
+  if (searchMarker) map.removeLayer(searchMarker);
+
+  const icon = L.divIcon({
+    className: '',
+    html: `<div style="
+      width:30px;height:30px;border-radius:50%;
+      background:#ef4444;border:3px solid #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5), 0 0 20px rgba(239,68,68,0.4);
+      display:flex;align-items:center;justify-content:center;font-size:1rem;
+      cursor:grab;
+    ">📍</div>`,
+    iconSize: [30, 30], iconAnchor: [15, 15]
+  });
+
+  searchMarker = L.marker([lat, lon], { icon, draggable: true }).addTo(map);
+
+  // Quando o usuário terminar de arrastar o pino
+  searchMarker.on('dragend', function () {
+    const pos = searchMarker.getLatLng();
+    if (selectedUser) {
+      calculateRouteTo(pos.lat, pos.lng);
+    }
+    // Reverse geocode para mostrar o nome do local
+    reverseGeocode(pos.lat, pos.lng);
+  });
+
+  return searchMarker;
+}
+
+async function reverseGeocode(lat, lon) {
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18`, {
+      headers: { 'User-Agent': 'KickIRL-App' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.display_name) {
+        document.getElementById('search-input').value = data.display_name.split(',')[0];
+      }
+    }
+  } catch {}
+}
+
+// Botão de soltar pino no mapa
+function toggleDropPin() {
+  dropPinMode = !dropPinMode;
+  const btn = document.getElementById('drop-pin-btn');
+  if (dropPinMode) {
+    btn.classList.add('active');
+    document.getElementById('map').style.cursor = 'crosshair';
+    // Show temporary toast notification
+    showToast('📍 Clique no mapa para soltar um pino');
+  } else {
+    btn.classList.remove('active');
+    document.getElementById('map').style.cursor = '';
+  }
+}
+
+// Escutar cliques no mapa para soltar o pino
+map.on('click', function(e) {
+  if (!dropPinMode) return;
+  
+  const lat = e.latlng.lat;
+  const lon = e.latlng.lng;
+
+  createDestinationMarker(lat, lon);
+  reverseGeocode(lat, lon);
+
+  if (selectedUser) {
+    calculateRouteTo(lat, lon);
+  }
+
+  // Desativar modo de drop-pin
+  dropPinMode = false;
+  const btn = document.getElementById('drop-pin-btn');
+  btn.classList.remove('active');
+  document.getElementById('map').style.cursor = '';
+  document.getElementById('clear-search-btn').style.display = 'block';
+});
+
+async function searchPlaces() {
+  const query = document.getElementById('search-input').value.trim();
+  if (!query) return;
+
+  const resultsDiv = document.getElementById('search-results');
+  resultsDiv.innerHTML = '<div style="padding:10px;font-size:0.8rem;color:var(--text2)">Buscando...</div>';
+  resultsDiv.style.display = 'block';
+  document.getElementById('clear-search-btn').style.display = 'block';
+
+  let searchUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=8`;
+
+  // Se houver um streamer selecionado, restringir busca à área próxima dele
+  if (selectedUser) {
+    const s = streamers.get(selectedUser);
+    if (s && s.location) {
+      const lat = s.location.lat;
+      const lon = s.location.lon;
+      // Raio de ~5km para priorizar locais próximos ao streamer
+      const delta = 0.05;
+      const viewbox = `${lon-delta},${lat+delta},${lon+delta},${lat-delta}`;
+      searchUrl += `&viewbox=${viewbox}&bounded=1`;
+    }
+  }
+
+  try {
+    const res = await fetch(searchUrl, {
+      headers: { 'User-Agent': 'KickIRL-App' }
+    });
+    if (!res.ok) throw new Error('Erro na API de busca');
+    let data = await res.json();
+
+    // Se bounded=1 retornar poucos resultados, tenta sem bounded
+    if (data.length < 2 && selectedUser) {
+      const s = streamers.get(selectedUser);
+      if (s && s.location) {
+        const fallbackUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=8`;
+        const res2 = await fetch(fallbackUrl, { headers: { 'User-Agent': 'KickIRL-App' } });
+        if (res2.ok) {
+          const fallbackData = await res2.json();
+          // Mesclar resultados sem duplicar
+          const existingIds = new Set(data.map(d => d.place_id));
+          for (const item of fallbackData) {
+            if (!existingIds.has(item.place_id)) data.push(item);
+          }
+        }
+      }
+    }
+
+    if (data.length === 0) {
+      resultsDiv.innerHTML = '<div style="padding:10px;font-size:0.8rem;color:var(--text3)">Nenhum local encontrado</div>';
+      return;
+    }
+
+    // Se streamer está selecionado, ordenar por proximidade
+    if (selectedUser) {
+      const s = streamers.get(selectedUser);
+      if (s && s.location) {
+        data.sort((a, b) => {
+          const dA = Math.hypot(a.lat - s.location.lat, a.lon - s.location.lon);
+          const dB = Math.hypot(b.lat - s.location.lat, b.lon - s.location.lon);
+          return dA - dB;
+        });
+      }
+    }
+
+    resultsDiv.innerHTML = '';
+    data.slice(0, 6).forEach(item => {
+      const name = item.display_name.split(',')[0];
+      const addr = item.display_name.split(',').slice(1, 3).join(',').trim();
+
+      // Calcular distância se streamer selecionado
+      let distLabel = '';
+      if (selectedUser) {
+        const s = streamers.get(selectedUser);
+        if (s && s.location) {
+          const R = 6371;
+          const dLat = (item.lat - s.location.lat) * Math.PI / 180;
+          const dLon = (item.lon - s.location.lon) * Math.PI / 180;
+          const a2 = Math.sin(dLat/2)**2 + Math.cos(s.location.lat*Math.PI/180)*Math.cos(item.lat*Math.PI/180)*Math.sin(dLon/2)**2;
+          const km = R * 2 * Math.atan2(Math.sqrt(a2), Math.sqrt(1-a2));
+          distLabel = km < 1 ? `${Math.round(km*1000)}m` : `${km.toFixed(1)}km`;
+        }
+      }
+
+      const div = document.createElement('div');
+      div.className = 'search-result-item';
+      div.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="search-result-name">${name}</span>
+          ${distLabel ? `<span style="font-size:0.68rem;color:var(--kick);font-weight:600;white-space:nowrap;margin-left:8px;">${distLabel}</span>` : ''}
+        </div>
+        <span class="search-result-addr">${addr}</span>
+      `;
+      div.onclick = () => selectSearchResult(item);
+      resultsDiv.appendChild(div);
+    });
+  } catch (err) {
+    resultsDiv.innerHTML = '<div style="padding:10px;font-size:0.8rem;color:var(--red)">Erro ao buscar locais</div>';
+  }
+}
+
+function selectSearchResult(item) {
+  const lat = parseFloat(item.lat);
+  const lon = parseFloat(item.lon);
+
+  document.getElementById('search-input').value = item.display_name.split(',')[0];
+  document.getElementById('search-results').style.display = 'none';
+
+  createDestinationMarker(lat, lon);
+  
+  // Voar para o local
+  map.flyTo([lat, lon], 15, { duration: 1.2 });
+
+  // Se houver um streamer selecionado, calcular rota até o local
+  if (selectedUser) {
+    calculateRouteTo(lat, lon);
+  }
+}
+
+async function calculateRouteTo(destLat, destLon) {
+  const s = streamers.get(selectedUser);
+  if (!s || !s.location) return;
+
+  const startLat = s.location.lat;
+  const startLon = s.location.lon;
+
+  const url = `https://router.project-osrm.org/route/v1/driving/${startLon},${startLat};${destLon},${destLat}?overview=full&geometries=geojson`;
+
+  const card = document.getElementById('route-info-card');
+  document.getElementById('route-drive-info').textContent = 'Calculando rota...';
+  document.getElementById('route-walk-info').textContent = 'Calculando...';
+  card.classList.add('show');
+
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('OSRM error');
+    const data = await res.json();
+
+    if (data.code === 'Ok' && data.routes && data.routes[0]) {
+      const route = data.routes[0];
+      const distanceMeters = route.distance;
+      const durationSeconds = route.duration;
+
+      // Calcular tempos
+      const distanceKm = (distanceMeters / 1000).toFixed(1);
+      const driveMinutes = Math.round(durationSeconds / 60);
+      const walkDurationSeconds = distanceMeters / 1.388; // 5 km/h
+      const walkHours = Math.floor(walkDurationSeconds / 3600);
+      const walkMinutes = Math.round((walkDurationSeconds % 3600) / 60);
+
+      let walkText = '';
+      if (walkHours > 0) {
+        walkText = `${walkHours}h ${walkMinutes}m`;
+      } else {
+        walkText = `${walkMinutes} min`;
+      }
+
+      document.getElementById('route-drive-info').textContent = `${distanceKm} km • ${driveMinutes} min`;
+      document.getElementById('route-walk-info').textContent = `${distanceKm} km • ${walkText}`;
+
+      // Desenhar linha no mapa
+      if (routeLine) map.removeLayer(routeLine);
+      
+      const coords = route.geometry.coordinates.map(pt => [pt[1], pt[0]]);
+      routeLine = L.polyline(coords, {
+        color: '#38bdf8',
+        weight: 4,
+        dashArray: '5, 8',
+        opacity: 0.8
+      }).addTo(map);
+    } else {
+      throw new Error('No route found');
+    }
+  } catch (err) {
+    document.getElementById('route-drive-info').textContent = 'Erro ao calcular rota';
+    document.getElementById('route-walk-info').textContent = '—';
+  }
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('clear-search-btn').style.display = 'none';
+  if (searchMarker) {
+    map.removeLayer(searchMarker);
+    searchMarker = null;
+  }
+  // Desativar drop pin mode se ativo
+  if (dropPinMode) {
+    dropPinMode = false;
+    const btn = document.getElementById('drop-pin-btn');
+    if (btn) btn.classList.remove('active');
+    document.getElementById('map').style.cursor = '';
+  }
+  clearRoute();
+}
+
+function clearRoute() {
+  if (routeLine) {
+    map.removeLayer(routeLine);
+    routeLine = null;
+  }
+  document.getElementById('route-info-card').classList.remove('show');
+}
+
+// Fechar resultados de busca ao clicar fora
+document.addEventListener('click', e => {
+  const searchContainer = document.querySelector('.map-search-container');
+  if (searchContainer && !searchContainer.contains(e.target)) {
+    document.getElementById('search-results').style.display = 'none';
+  }
 });
 
 // ═══════════ START ═══════════

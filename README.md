@@ -1,10 +1,16 @@
 # KickIRL 🌍📸
 
-O **KickIRL** é um sistema completo de rastreamento de localização GPS (Global Positioning System) em tempo real construído exclusivamente para streamers "In Real Life" (IRL) da plataforma Kick.com. 
+O **KickIRL** é um sistema avançado de rastreamento de localização GPS (Global Positioning System) em tempo real, construído exclusivamente para streamers "In Real Life" (IRL) das plataformas Kick e Twitch. 
 
-O objetivo do projeto é permitir que os espectadores acompanhem exatamente por onde o streamer está andando ao redor do mundo, com integração direta na live via OBS Studio e um portal global de mapas.
+O projeto permite que os espectadores acompanhem o trajeto exato do streamer no mapa de forma contínua e suave, com integração direta na live via OBS Studio e um portal global interativo.
 
-![KickIRL Banner](https://rtirl.com/favicon.ico) *(Projeto inspirado no modelo de mapas ao vivo)*
+### 🌟 Destaques do Projeto
+
+*   **Roteamento Inteligente às Ruas (Road Snapping):** O trajeto percorrido no mapa é alinhado automaticamente à malha de ruas e avenidas usando a API do OSRM (Open Source Routing Machine). Isso evita que a linha de trajeto atravesse edifícios ou quarteirões em linha reta.
+*   **Suporte Multiplataforma:** Integração dinâmica de players de stream e botões de ação customizados para **Kick**, **Twitch** e **YouTube**.
+*   **Grupo Seleto de Streamers:** Desenvolvido inicialmente para atender a um grupo seleto de streamers (`gabepeixe`, `loud_coringa`, `loud_caiox` e `brabox`), com arquitetura planejada para expansão futura para novos criadores.
+*   **Modo Offline Temporário com Auto-Cleanup:** Quando o streamer encerra a live ou o sinal cai, seu pino fica cinza (faded) no mapa imediatamente, indicando o status offline. Caso ele permaneça desconectado por mais de 5 minutos, o marcador e o seu trajeto correspondente são removidos automaticamente do mapa para manter a interface limpa.
+*   **Zonas de Segurança (Safe Zones):** Ocultação de localização automática baseada em raio geográfico para proteger a privacidade residencial do streamer.
 
 ---
 
@@ -60,4 +66,7 @@ Este projeto está pré-configurado para rodar no plano gratuito do **Render**.
 
 ---
 
-**Desenvolvido com 💚 para a comunidade IRL.**
+**Desenvolvido com 💚 por Bruno Silva.**
+
+*   🔗 **GitHub:** [github.com/BrunoSilva77](https://github.com/BrunoSilva77)
+*   🔗 **LinkedIn:** [linkedin.com/in/bruno-h-silva2025](https://www.linkedin.com/in/bruno-h-silva2025/)

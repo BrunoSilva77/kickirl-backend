@@ -244,8 +244,12 @@ function updateMap(data) {
   }
 
   // Trail
-  trail.push([lat, lon]);
-  if (trail.length > 150) trail.shift();
+  if (data.trail && data.trail.length > 0) {
+    trail = data.trail.map(p => Array.isArray(p) ? p.slice(0, 2) : [p.lat, p.lon]);
+  } else {
+    trail.push([lat, lon]);
+    if (trail.length > 150) trail.shift();
+  }
   if (trail.length > 1) {
     if (polyline) map.removeLayer(polyline);
     polyline = L.polyline(trail, { color: '#53FC18', weight: 4, opacity: 0.6, smoothFactor: 1.5 }).addTo(map);
